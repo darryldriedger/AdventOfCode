@@ -5,22 +5,22 @@ const {readFileSync, promises: fsPromises} = require('fs');
 function syncReadFile(filename) {
   const contents = readFileSync(filename, 'utf-8');
 
-  const elves = []
-  elves[0] = []
+  let elfCount = 0 
+  let elves = []
+  elves[elfCount] = []
   const arr = contents.split(/\r?\n/);
 
 
-  const elfCount = 0
   
 
 for(let i=0; i < arr.length; i++){
-    // console.log(Number(arr[i]))
-    let elf = elves[elfCount]
-    if(Number(arr[i]) == 0){
-        elfCount + 1 
-        // console.log(elfCount) 
-        elf.push(Number(arr[i]))
-    } else { elf.push(Number(arr[i]))
+   
+    if(Number(arr[i]) === 0){
+        elfCount ++
+        elves[elfCount] = []
+        elves[elfCount].push(Number(arr[i]))
+    } else { 
+        elves[elfCount].push(Number(arr[i]))
     }
 }
 //   console.log(arr);
