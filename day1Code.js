@@ -1,7 +1,6 @@
 const { Console } = require('console');
 const {readFileSync, promises: fsPromises} = require('fs');
 
-// ✅ read file SYNCHRONOUSLY
 function syncReadFile(filename) {
   const contents = readFileSync(filename, 'utf-8');
 
@@ -11,12 +10,8 @@ function syncReadFile(filename) {
   const arr = contents.split(/\r?\n/);
   let elvesCalories = []
 
-
-  
-
 for(let i=0; i < arr.length; i++){
    
-
     if(Number(arr[i]) === 0){
         elfCount ++
         elves[elfCount] = []
@@ -24,7 +19,6 @@ for(let i=0; i < arr.length; i++){
     } else { 
         elves[elfCount].push(Number(arr[i]))
     }
-
 }
 for(let i=0; i < elves.length; i++){
 elvesCalories.push(elves[i].reduce((accumulator, currentValue) => accumulator + currentValue,0))
@@ -35,12 +29,8 @@ elvesCalories.sort(function(a, b){return b - a})
 let topThree = elvesCalories[0] + elvesCalories[1] + elvesCalories[2]
 console.log(elvesCalories)
 console.log(topThree)
-//   console.log(arr);
-// console.log(contents)
 
   return elves;
 }
-
-
 
 syncReadFile('./day1Data.txt');
