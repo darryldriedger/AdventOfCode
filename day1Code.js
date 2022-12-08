@@ -29,8 +29,12 @@ for(let i=0; i < arr.length; i++){
 for(let i=0; i < elves.length; i++){
 elvesCalories.push(elves[i].reduce((accumulator, currentValue) => accumulator + currentValue,0))
 }
-console.log(elvesCalories)
+// console.log(elvesCalories)
 console.log(Math.max(...elvesCalories))
+elvesCalories.sort(function(a, b){return b - a})
+let topThree = elvesCalories[0] + elvesCalories[1] + elvesCalories[2]
+console.log(elvesCalories)
+console.log(topThree)
 //   console.log(arr);
 // console.log(contents)
 
