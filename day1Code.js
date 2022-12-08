@@ -28,7 +28,7 @@ console.log(Math.max(...elvesCalories))
 elvesCalories.sort(function(a, b){return b - a})
 let topThree = elvesCalories[0] + elvesCalories[1] + elvesCalories[2]
 console.log(elvesCalories)
-console.log(topThree)
+console.log(`The top Three calorie-elves carry ${topThree} calories`)
 
   return elves;
 }
