@@ -9,12 +9,14 @@ function syncReadFile(filename) {
   let elves = []
   elves[elfCount] = []
   const arr = contents.split(/\r?\n/);
+  let elvesCalories = []
 
 
   
 
 for(let i=0; i < arr.length; i++){
    
+
     if(Number(arr[i]) === 0){
         elfCount ++
         elves[elfCount] = []
@@ -22,10 +24,16 @@ for(let i=0; i < arr.length; i++){
     } else { 
         elves[elfCount].push(Number(arr[i]))
     }
+
 }
+for(let i=0; i < elves.length; i++){
+elvesCalories.push(elves[i].reduce((accumulator, currentValue) => accumulator + currentValue,0))
+}
+console.log(elvesCalories)
+console.log(Math.max(...elvesCalories))
 //   console.log(arr);
 // console.log(contents)
-console.log(elves)
+
   return elves;
 }
 
