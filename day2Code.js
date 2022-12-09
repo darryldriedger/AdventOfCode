@@ -11,62 +11,48 @@ function syncReadFile(filename) {
 for(let i = 0; i < arrCopy.length; i++){
     let opponent = arrCopy[i].slice(0,1)
     let me = arrCopy[i].slice(2)
-    let OpponentVal, meVal, OpponentType, meType
+    let meVal
 
-    switch(opponent){
-        case "A":
-            OpponentVal = 1;
-            break;
-        case "B":
-            OpponentVal = 2;
-            break;
-        case "C":
-            OpponentVal = 3;
+    if (me === "X") {
+        switch(opponent){
+            case "A": //rock 1
+                meVal = 3;
+                break;
+            case "B": //paper 2
+                meVal = 1;
+                break;
+            case "C": //scissors 3
+                meVal = 2;
+        }
+    } else if (me === "Y") {
+        switch(opponent){
+            case "A": //rock 1
+                meVal = 1 + 3;
+                break;
+            case "B": //paper 2
+                meVal = 2 + 3;
+                break;
+            case "C": //scissors 3
+                meVal = 3 + 3;
+        }
+    } else if (me === "Z") {
+        switch(opponent){
+            case "A": //rock 1
+                meVal = 2 + 6;
+                break;
+            case "B": //paper 2
+                meVal = 3 + 6;
+                break;
+            case "C": //scissors 3
+                meVal = 1 + 6;
+        }
     }
-    switch(opponent){
-        case "A":
-            OpponentType = "ROCK";
-            break;
-        case "B":
-            OpponentType = "PAPER";
-            break;
-        case "C":
-            OpponentType = "SCISSORS";
-    }
-    switch(me){
-        case "X":
-            meVal = 1;
-            break;
-        case "Y":
-            meVal = 2;
-            break;
-        case "Z":
-            meVal = 3;
-    }
-    switch(me){
-        case "X":
-            meType = "ROCK";
-            break;
-        case "Y":
-            meType = "PAPER";
-            break;
-        case "Z":
-            meType = "SCISSORS";
-    }
-    if(OpponentType === "ROCK" && meType === "SCISSORS" || OpponentType === "PAPER" && meType === "ROCK"|| OpponentType === "SCISSORS" && meType === "PAPER"){
+    
         TotalsArr.push(meVal)
-    } else if(OpponentType === meType) {
-        let Tie = meVal + 3
-        TotalsArr.push(Tie)
-    } else if(OpponentType === "SCISSORS" && meType === "ROCK" || OpponentType === "ROCK" && meType === "PAPER" || OpponentType === "PAPER" && meType === "SCISSORS") {
-        let Win = meVal + 6
-        TotalsArr.push(Win)
     }
-
-}
-console.log(TotalsArr)
-console.log(TotalsArr.reduce((accumulator, currentValue) => accumulator + currentValue,0))
-return TotalsArr
+    console.log(TotalsArr)
+    console.log(TotalsArr.reduce((accumulator, currentValue) => accumulator + currentValue,0))
+    return TotalsArr
 }
 
 syncReadFile('./day2Data.txt');
