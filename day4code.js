@@ -19,9 +19,9 @@ function syncReadFile(filename) {
             row.push(start)
             row.push(finish)
         } 
-        if(row[0] >= row[2] && row[1] <= row[3]){
+        if(row[0] >= row[2] && row[0] <= row[3] || row[1] >= row[2] && row[1] <= row[3] ){
             Count ++
-        } else if(row[2] >= row[0] && row[3] <= row[1]){
+        } else if (row[2] >= row[0] && row[2] <= row[0] || row[3] >= row[0] && row[3] <= row[1]){
             Count ++
         }
     }
