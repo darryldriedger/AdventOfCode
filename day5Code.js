@@ -24,15 +24,15 @@ function syncReadFile(filename) {
             }
         }
     }
-    for(i = 10; i < arrCopy.length; i++){
+    for(i = 10; i < arrCopy.length; i++){//arrCopy.length
         let move = arrCopy[i].match(/^\d+|\d+\b|\d+(?=\w)/g)
-        for(j = 0; j < move[0]; j++){
-            let fromStack = Number(move[1]) -1
-            let toStack = Number(move[2]) -1
-           let cranePick = stacks[fromStack]
-            let craneDrop = stacks[toStack]
-            let standBack = cranePick.shift()
-            craneDrop.unshift(standBack)
+        let fromStack = Number(move[1]) -1
+        let toStack = Number(move[2]) -1
+        let cranePick = stacks[fromStack]
+        let craneDrop = stacks[toStack]
+        let crane9001 = cranePick.splice(0,Number(move[0]))
+        while(crane9001.length >= 1){
+            craneDrop.unshift(crane9001.pop())
         }
     }
     console.log(stacks)
