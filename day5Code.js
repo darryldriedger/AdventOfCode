@@ -7,7 +7,6 @@ function syncReadFile(filename) {
     let arrCopy = [...arr]
     let freight = []
     let freightRow = []
-    let freightObj = {}
     for(i = 0; i < 8; i++){
         let newRow = freightRow[i] = []
         for(j = 1; j <= arrCopy[i].length; j += 4){
@@ -16,8 +15,27 @@ function syncReadFile(filename) {
         }
         freight.push(newRow)
     }
-    console.log(freight)
-
-    return arrCopy
-}
+    let stacks = [[],[],[],[],[],[],[],[],[]]
+    for(stackArray = 0; stackArray < freight.length; stackArray++){
+        for(stack = 0; stack < 9; stack++){
+            let resultStack = stacks[stack]
+            if(freight[stackArray][stack] !== ' '){
+                resultStack.push(freight[stackArray][stack])
+            }
+        }
+    }
+    for(i = 10; i < arrCopy.length; i++){
+        let move = arrCopy[i].match(/^\d+|\d+\b|\d+(?=\w)/g)
+        for(j = 0; j < move[0]; j++){
+            let fromStack = Number(move[1]) -1
+            let toStack = Number(move[2]) -1
+           let cranePick = stacks[fromStack]
+            let craneDrop = stacks[toStack]
+            let standBack = cranePick.shift()
+            craneDrop.unshift(standBack)
+        }
+    }
+    console.log(stacks)
+        return arrCopy
+    }
 syncReadFile('./day5Data.txt')
