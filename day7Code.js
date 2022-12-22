@@ -7,7 +7,7 @@ function syncReadFile(filename) {
     const arr = contents.split(/\r?\n/)
 
     let filesys = {}
-    let position 
+    let position = ""
     let cmdCounter = 0
 
     class sysNode {
@@ -15,26 +15,31 @@ function syncReadFile(filename) {
           this.value = value;
           this.type = null;
           this.descendants = [];
-          this.parent;
+          this.parents = [];
+          this.directParent = null;
           this.fileSize = 0;
         }
     }
-    let root = new sysNode('root')
-    filesys.root = root
-    position = root
-    
-    for(cmdCounter; cmdCounter < arr.length; cmdCounter++){              //arr.length
+    filesys.root = new sysNode('root')
+    position = filesys.root.value
+
+    for(cmdCounter; cmdCounter < arr.length; cmdCounter++){
         termLine = arr[cmdCounter].split(" ")
         // console.log(termLine)
         if(termLine[0] === "$"){
             if(termLine[1] === "cd"){
                 if(termLine.includes("/")){
-                    position = root
+                    position = 'root'
+                    // console.log("/")
+                    // console.log(position)
                 } else if(termLine.includes("..")){
-                        position = position.parent
-                } else if(termLine[2] !== ""){
-                    let nextPosition = filesys[termLine[2]]
-                    position = nextPosition
+                        position = filesys[position].directParent
+                        // console.log("..")
+                        // console.log(position)
+                } else {
+                    position = termLine[2]
+                    // console.log("move to")
+                    // console.log(position)
                 }
             } else if(termLine[1] = "ls"){
                 cmdCounter++ 
@@ -43,38 +48,67 @@ function syncReadFile(filename) {
                 for (cmdCounter; cmdCounter < arr.length; cmdCounter++) {
                     termLine = arr[cmdCounter].split(" ")
                     if (termLine.includes("$")) { break; }
+
+                    let newNode = new sysNode(termLine[1])
+                    filesys[newNode.value] = newNode
+
                     if(termLine.includes("dir")){
-                        let newNode = termLine[1]
-                        newNode = new sysNode(termLine[1])
                         newNode.type = "dir"
-                        newNode.parent = position
-                        position.descendants.push(newNode.value)
-                        filesys[termLine[1]] = newNode
                     } else {
-                        let newNode = termLine[1]
-                        newNode = new sysNode(termLine[1])
                         newNode.type = "file"
-                        newNode.parent = position
-                        position.descendants.push(newNode.value)
                         newNode.fileSize = Number(termLine[0])
-                        position.fileSize = position.fileSize + Number(termLine[0])
-                        filesys[termLine[1]] = newNode
                     }
+                        newNode.parents.push(position)
+                        newNode.directParent = filesys[position].value
+                        filesys[position].descendants.push(newNode.value)
                   }
                   cmdCounter--
             }
         }
     }
-    for(i = 0; i < root.descendants.length; i++){
-        let focus = root.descendants[i]
-        // console.log(filesys[focus])
-        if(filesys[focus].type === "dir"){
-            console.log(root.descendants[i])
-        }
-    }
-    // console.log(Object.keys(filesys).length)
+    // Object.keys(filesys).reverse().forEach((key) => {
+    //     if (filesys[key].type === 'dir') {  //key !== 'root' && 
+    //         let childList = filesys[key].descendants
+    //         for(i = 0; i < childList.length; i++){
+    //             let child = childList[i]
+    //             let childSize = filesys[child].fileSize
+    //             filesys[key].fileSize += childSize
+    //         }
+    //      }
+    // })
+        Object.keys(filesys).reverse().forEach((key) => {
+        if (filesys[key].type === 'dir') {  //key !== 'root' && 
+            let childList = filesys[key].descendants
+            for(i = 0; i < childList.length; i++){
+                let child = childList[i]
+                let childSize = filesys[child].fileSize
+                filesys[key].fileSize += childSize
+            }
+         }
+    })
+
+    //   let dirTotal = 0
+    // Object.keys(filesys).forEach((key) => {
+    //     if(filesys[key].type === "dir"){
+    //         if(filesys[key].fileSize <= 100000){
+    //             dirTotal += filesys[key].fileSize
+    //         }
+    //         if(filesys[key].fileSize === 0){
+    //             console.log(filesys[key].value)
+    //         }
+    //     }
+    //     return dirTotal
+    // })
     // console.log(filesys)
-    // console.log(root)
-        return arr
+    // console.log(`The directory Total under 100000 is ${dirTotal}`)
+    // console.log(filesys['jfp'])
+    // console.log(filesys['wvdqjn'])
+    // console.log(filesys['zmllsrzc'])
+    // console.log(filesys['slwhsqw'])
+    // console.log(filesys['bgv'])
+    // console.log(filesys['bvqwrs'])
+    //1723892
+        return filesys
 }
+
 syncReadFile('./day7Data.txt')
