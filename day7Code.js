@@ -31,8 +31,8 @@ function syncReadFile(filename) {
     for(cmdCounter; cmdCounter < arr.length; cmdCounter++){//arr.length
         termLine = arr[cmdCounter].split(" ")
         // console.log(termLine)
-        console.log(position)
-        console.log(filesys[position])
+        // console.log(position)
+        // console.log(filesys[position])
         if(termLine[0] === "$"){
             if(termLine[1] === "cd"){
                 if(termLine.includes("/")){
@@ -94,20 +94,43 @@ function syncReadFile(filename) {
     })
 
       let dirTotal = 0
+      let totalSize = filesys.root.fileSize
+      let fileSysLimit = 70000000
+      let unusedSpace = 30000000
+      let targetSpace = fileSysLimit - unusedSpace
+      let fileSizeArray = []
+      let sizeToRemove = totalSize - targetSpace
+
     Object.keys(filesys).forEach((key) => {
         if(filesys[key].type === "dir"){
-            if(filesys[key].fileSize <= 100000){ //<= 100000
-                dirTotal += filesys[key].fileSize
-            }
-            if(filesys[key].fileSize === 0){
-                // console.log(filesys[key].value)
+            // if(filesys[key].fileSize <= 100000){ //<= 100000
+            //     dirTotal += filesys[key].fileSize
+            // }
+            if(filesys[key].fileSize > sizeToRemove){
+                // totalSize += filesys[key].fileSize
+                
+                fileSizeArray.push(filesys[key].fileSize)
             }
         }
-        return dirTotal
+        return dirTotal, totalSize, fileSizeArray
     })
-    // console.log(filesys)
+
+console.log(totalSize)
+console.log(targetSpace)
+console.log(sizeToRemove)
+
+    // Object.keys(filesys).forEach((key) => {
+    //     if(filesys[key].type === "dir"){
+    //         if(filesys[key].fileSize > 0){
+    //             fileSizeArray.push(filesys[key].fileSize)
+    //         }
+    //     }
+    //     return fileSizeArray
+    // })
+    console.log(filesys.root)
+    fileSizeArray.sort(function(a, b){return a - b})
+    console.log(fileSizeArray)
     console.log(`The directory Total under 100000 is ${dirTotal}`)
-    // console.log(filesys['jgrdzbbh_fdcdh'])
         return filesys
 }
 
