@@ -8,88 +8,101 @@ function syncReadFile(filename) {
 
     for(i = 0; i < arr.length; i++){
         let stringArr = [...arr[i]]
-        matrixArr.push(stringArr)
+        let numArr = []
+        for(j = 0; j < stringArr.length; j++){
+           let num = parseInt(stringArr[j])
+            numArr.push(num)
+        }
+        matrixArr.push(numArr)
     }
 
-    let visibleStatusArr = [...matrixArr]
+    let visArrLeft = [...matrixArr], visArrRight = [...matrixArr], visArrTop = [...matrixArr], visArrBottom = [...matrixArr]
+    let prevTop = 1, prevRight = 1, prevBottom = 1, prevLeft = 1
 
-    // console.log(visibleStatusArr)
     for(row = 0; row < matrixArr.length; row++){
 
-        for(position = 0; position < matrixArr[row].length; position++){
+        let arrLength = matrixArr.length - 1, rowLength = matrixArr[row].length - 1, bottomRow = arrLength - row
 
-            if(row === 0 || row === matrixArr.length - 1 || position === 0 || position === matrixArr[row].length - 1){
-                visibleStatusArr[row][position] = 1
+        for(position = 0; position <= rowLength; position++){
+            let rightPosition = rowLength - position
 
+            if(position === 0 || position === rowLength || row === 0 || row === rowLength ){
+                visArrLeft[row][position] = 1
+                visArrRight[row][position] = 1
+                visArrTop[row][position] = 1
+                visArrBottom[row][position] = 1
+            // } else if(rightPosition === 0 || rightPosition === rowLength || row === 0 || row === rowLength ){
+            //     visArrLeft[row][rightPosition] = 1
+            //     visArrRight[row][rightPosition] = 1
+            //     visArrTop[row][rightPosition] = 1
+            //     visArrBottom[row][rightPosition] = 1
             } else {
-                let top = row - 1
-                let left = position - 1
-                let positionR = matrixArr[row].length - position
-                let right = positionR + 1
-                console.log(top)
-                console.log(left)
-                console.log(positionR)
-                console.log(right)
-//============================>>>>>>>>   
-            //top down
-                if(Number(matrixArr[row][position]) > Number(matrixArr[top][position]) && visibleStatusArr[top][position] === 1){
-                    visibleStatusArr[row][position] = 1
-                } else {
-                    visibleStatusArr[row][position] = 0
-                }
-//============================>>>>>>>>             
-            //left to right
-                if(Number(matrixArr[row][position]) > Number(matrixArr[row][left]) && visibleStatusArr[row][left] === 1){
-                    visibleStatusArr[row][position] = 1
-                } else {
-                        if(visibleStatusArr[row][position] !== 1){
-                            visibleStatusArr[row][position] = 0
-                        } 
-                }
-//============================>>>>>>>>  
-            //right to left
-                if(Number(matrixArr[row][positionR]) > Number(matrixArr[row][right]) && visibleStatusArr[row][right] === 1){
-                    visibleStatusArr[row][positionR] = 1
-                } else {
-                        if(visibleStatusArr[row][positionR] !== 1){
-                            visibleStatusArr[row][positionR] = 0
-                        } 
-                }
-//============================>>>>>>>>
-                let rowB = matrixArr.length - position
-                let bottom = rowB + 1
-// //============================>>>>>>>>                      
-//                 if(row !== 0 || row !== matrixArr.length - 1 || position !== 0 || position !== matrixArr[row].length - 1){
-// //============================>>>>>>>>   
-//             // //top down
-//             //         if(Number(matrixArr[rowB][position]) > Number(matrixArr[bottom][position]) && visibleStatusArr[bottom][position] === 1){
-//             //             visibleStatusArr[rowB][position] = 1
-//             //         } else {
-//             //             visibleStatusArr[rowB][position] = 0
-//             //         }                
 
-//                 } 
-            }       
+                let runFromLeft      = matrixArr[row][position] 
+                let prevLeftTree     = matrixArr[row][position - 1]
+                let prevTopTree      = matrixArr[row - 1][position]
+                let prevBottomTree   = matrixArr[bottomRow + 1][position]
+                let runFromRight     = matrixArr[row][rightPosition]
+                let prevRightTree    = matrixArr[row][position + 1]
+
+                //left
+                if(runFromLeft > prevLeftTree && prevLeft === 1){
+                    visArrLeft[row][position] = 1
+                    prevLeft = 1
+                } else if(visArrLeft[row][position] !== 1){
+                    visArrLeft[row][position] = 0
+                    prevLeft = 0
+                }
+                //right
+                if(runFromRight > prevRightTree && prevRight === 1){
+                    visArrRight[row][rightPosition] = 1
+                    prevRight = 1
+                } else if(visArrRight[row][rightPosition] !== 1) {
+                    visArrRight[row][rightPosition] = 0
+                    prevRight = 0
+                }
+                // //top
+                // if(runFromLeft > prevTopTree && prevTop === 1){
+                //     visArrTop[row][position] = 1
+                //     prevTop = 1
+                // } else if(visArrTop[row][position] !== 1){
+                //     visArrTop[row][position] = 0
+                //     prevTop = 0
+                // }
+                // //bottom
+                // if(runFromLeft > prevBottomTree && prevBottom === 1){
+                //     visArrBottom[bottomRow][position] = 1
+                //     prevBottom = 1
+                // } else if(visArrBottom[bottomRow][position] !== 1) {
+                //     visArrBottom[bottomRow][position] = 0
+                //     // prevBottom = 0
+                // }
+            }
         }
+
     }
 
     let sum = (a, b) => a + b
-    let summer = 0
-    for (let i = 0; i < visibleStatusArr.length; i++) {
-        // console.log(i)
-        summer += visibleStatusArr[i].reduce(sum)
-        // console.log(visibleStatusArr[i].reduce(sum))
-        // console.log(summer)
+    let sumLeft = 0, sumRight = 0, sumTop = 0, sumBottom = 0
+    for (let i = 0; i < visArrLeft.length; i++) {
+        sumLeft += visArrLeft[i].reduce(sum)
     }
+    // for (let i = 0; i < visArrRight.length; i++) {
+    //     sumRight += visArrRight[i].reduce(sum)
+    // }
+        // sumTop += visArrTop[i].reduce(sum)
+        // sumBottom += visArrBottom[i].reduce(sum)
+    // console.log(visArrLeft[0])
+    console.log(visArrLeft[1])
+    // console.log(visArrRight[0])
+    console.log(visArrRight[1])
+    console.log(sumLeft)
+    console.log(sumRight)
+    console.log(sumTop)
+    console.log(sumBottom)
+    console.log(sumLeft + sumRight + sumTop + sumBottom)
 
-
-// console.log(visibleStatusArr)
-// console.log(visibleStatusArr[1])
-// console.log(visibleStatusArr[2])
-// console.log(visibleStatusArr[3])
-    // console.log(summer)
-    // console.log(visibleStatusArr[1].length)
-        return visibleStatusArr
+    return
 }
 
 syncReadFile('./day8Data.txt')
