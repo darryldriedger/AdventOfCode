@@ -59,7 +59,6 @@ function syncReadFile(filename) {
         }
     }
 
-
     let sum = (a, b) => a + b
     let sums = 0
     for (let i = 0; i < visArr.length; i++) {
