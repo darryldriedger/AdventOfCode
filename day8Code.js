@@ -8,83 +8,65 @@ function syncReadFile(filename) {
 
     for(i = 0; i < arr.length; i++){
         let stringArr = [...arr[i]]
-        let numArr = []
+        let numArr = [],visRowArr = []
         for(j = 0; j < stringArr.length; j++){
            let num = parseInt(stringArr[j])
             numArr.push(num)
+            visRowArr.push(0)
         }
         matrixArr.push(numArr)
-        visArr.push(numArr)
+        visArr.push(visRowArr)
     }
-
-    // for(baseRow = 0; baseRow < visArr.length; baseRow++){
-    //     for(basePosition = 0; basePosition < visArr[baseRow].length; basePosition++){
-    //         visArr[baseRow][basePosition] = 0
-    //     }
-    // }
-
-    let arrLength = matrixArr.length - 1
     
-    for(row = 0; row < 2; row++){//matrixArr.length
-        let rowLength = matrixArr[row].length - 1, bottomRow = arrLength - row
-        let saveLeft = 0, saveRight = 0, saveTop = 0, saveBottom = 0
+    for(row = 0; row < matrixArr.length; row++){
+        let saveLeft = matrixArr[row][0], saveRight = matrixArr[row][matrixArr[row].length -1]
+        for(position = 0; position <= matrixArr[row].length - 1; position++){
+            
 
-        for(position = 0; position <= rowLength; position++){
-            let rightPosition = rowLength - position
-
-            if(position === 0 || position === rowLength || row === 0 || row === rowLength ){
+            if(position === 0 || position === matrixArr[row].length - 1 || row === 0 || row === matrixArr.length - 1 ){
                 visArr[row][position] = 1
             } else {
-                let runFromLeft = matrixArr[row][position] 
-                // console.log(matrixArr[row][position])
-                let prevLeftTree = matrixArr[row][position - 1]
-                // let prevTopTree      = matrixArr[row - 1][position]
-                // let prevBottomTree   = matrixArr[bottomRow + 1][position]
-                // let runFromRight     = matrixArr[row][rightPosition]
-                // let prevRightTree    = matrixArr[row][rightPosition + 1]
-                //left
-                if(prevLeftTree < runFromLeft){
-                    saveLeft = runFromLeft
+                // left
+                if(matrixArr[row][position]> saveLeft){
+                    saveLeft = matrixArr[row][position]
                     visArr[row][position] = 1
-                    console.log(`num ${saveLeft}`)
-                } else {console.log(position)}
-                // console.log(saveLeft)
-                // //right
-                // if(prevRightTree < runFromRight){
-                //     saveRight = runFromRight
-                //     visArr[row][rightPosition] = 1
-                // }
-                // // //top
-                // if(runFromLeft > prevTopTree && prevTop === 1){
-                //     visArrTop[row][position] = 1
-                //     prevTop = 1
-                // }
-                // //bottom
-                // if(runFromLeft > prevBottomTree && prevBottom === 1){
-                //     visArrBottom[bottomRow][position] = 1
-                //     prevBottom = 1
-                // }
+                } 
+                //right
+                if(matrixArr[row][matrixArr[row].length - 1 - position] > saveRight){
+                    saveRight = matrixArr[row][matrixArr[row].length - 1 - position]
+                    visArr[row][matrixArr[row].length - 1 - position] = 1
+                }
             }
         }
 
     }
+
+    for(position = 1; position < matrixArr[0].length - 1; position++){
+        let saveTop = matrixArr[0][position], saveBottom = matrixArr[matrixArr.length - 1][position]
+
+        for(row = 1; row < matrixArr.length - 1; row++){
+            let bottomRow = matrixArr.length -1 - row
+            // top
+            if(matrixArr[row][position] > saveTop){
+                saveTop = matrixArr[row][position]
+                visArr[row][position] = 1
+            }
+            //bottom
+            if(matrixArr[bottomRow][position] > saveBottom){
+                saveBottom = matrixArr[bottomRow][position]
+                visArr[bottomRow][position] = 1
+            }
+        }
+    }
+
 
     let sum = (a, b) => a + b
     let sums = 0
     for (let i = 0; i < visArr.length; i++) {
         sums += visArr[i].reduce(sum)
     }
-    // console.log(visArr[0])
-    // console.log(visArr[98])
-    // console.log(visArr[0].length)
-    // console.log(visArr.length)
-    // // console.log(matrixArr[0])
-    // console.log(matrixArr[98])
-    // console.log(matrixArr)
-    // console.log(visArr)
     console.log(sums)
-// console.log(visArr)
     return
 }
-
 syncReadFile('./day8Data.txt')
+// syncReadFile('./exampledata.txt')
